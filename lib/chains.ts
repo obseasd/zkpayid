@@ -7,6 +7,7 @@ export interface ChainConfig {
   nativeSymbol: string
   contracts: {
     zkCreditScore?: string
+    zkGatedPool?: string
   }
 }
 
@@ -18,7 +19,8 @@ export const HASHKEY_TESTNET: ChainConfig = {
   faucet: 'https://hashkeychain.net/faucet',
   nativeSymbol: 'HSK',
   contracts: {
-    zkCreditScore: '', // Will be filled after deployment
+    zkCreditScore: '0x1d03f395bCC1E5bd0e516bE2C1Aa28950910DDC5',
+    zkGatedPool: '0x3338d2791e1cab22835a3975b1401C0f16C2AcCa',
   },
 }
 

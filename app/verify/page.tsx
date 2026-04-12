@@ -4,15 +4,13 @@ import { useState } from 'react'
 import { verifyAttestation, checkEligibility } from '@/lib/contract'
 
 const TIER_NAMES = ['Poor', 'Fair', 'Good', 'Excellent']
-const TIER_COLORS = ['#eb5757', '#f2994a', '#2172e5', '#27ae60']
-const TIER_BGS = ['rgba(235,87,87,0.12)', 'rgba(242,153,74,0.12)', 'rgba(33,114,229,0.12)', 'rgba(39,174,96,0.12)']
+const TIER_COLORS = ['#f87171', '#fbbf24', '#60a5fa', '#34d399']
+const TIER_BGS = ['rgba(248,113,113,0.10)', 'rgba(251,191,36,0.10)', 'rgba(96,165,250,0.10)', 'rgba(52,211,153,0.10)']
 
 export default function VerifyPage() {
   const [commitment, setCommitment] = useState('')
   const [verifying, setVerifying] = useState(false)
-  const [result, setResult] = useState<{
-    tier: number; maxLoanUSD: number; suggestedAPR: number; timestamp: number
-  } | null>(null)
+  const [result, setResult] = useState<{ tier: number; maxLoanUSD: number; suggestedAPR: number; timestamp: number } | null>(null)
   const [eligible, setEligible] = useState<boolean | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -21,7 +19,7 @@ export default function VerifyPage() {
     setVerifying(true); setError(null); setResult(null); setEligible(null)
     try {
       const res = await verifyAttestation(commitment)
-      if (!res) { setError('Attestation not found or contract not deployed yet.'); setVerifying(false); return }
+      if (!res) { setError('Attestation not found or contract not deployed.'); setVerifying(false); return }
       setResult(res)
       setEligible(await checkEligibility(commitment, 1))
     } catch (err) { setError((err as Error).message) }
@@ -29,97 +27,94 @@ export default function VerifyPage() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #131316 0%, #0d1117 50%, #131316 100%)' }}>
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none" style={{ background: 'radial-gradient(ellipse, rgba(0,194,168,0.06) 0%, transparent 70%)' }} />
+    <div className="min-h-screen" style={{ background: '#0c0c10' }}>
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none" style={{ background: 'radial-gradient(ellipse, rgba(159,111,253,0.04) 0%, transparent 70%)' }} />
 
-      <header className="relative z-10 flex items-center justify-between px-6 py-4 max-w-5xl mx-auto">
-        <a href="/" className="flex items-center gap-2.5">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <rect width="28" height="28" rx="8" fill="#ff007a"/>
-            <text x="6" y="20" fontSize="14" fontWeight="700" fill="white">ZK</text>
-          </svg>
-          <span className="font-semibold text-base">ZK-PayID</span>
+      <nav className="relative z-10 flex items-center justify-between px-5 py-3 max-w-5xl mx-auto">
+        <a href="/" className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-md flex items-center justify-center text-[11px] font-bold text-white" style={{ background: '#9F6FFD' }}>ZK</div>
+          <span className="font-semibold text-sm">ZK-PayID</span>
         </a>
-        <nav className="flex items-center gap-6 text-sm">
+        <div className="flex items-center gap-4 text-xs">
           <a href="/" style={{ color: 'var(--muted)' }} className="hover:text-white transition">Score</a>
-          <a href="/verify" className="text-white font-medium">Verify</a>
-        </nav>
-      </header>
+          <a href="/verify" className="font-medium" style={{ color: '#9F6FFD' }}>Verify</a>
+        </div>
+      </nav>
 
-      <main className="relative z-10 max-w-lg mx-auto px-4 py-12 space-y-6">
+      <main className="relative z-10 max-w-md mx-auto px-4 pt-12 space-y-5">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold">Verify Attestation</h1>
-          <p className="text-sm" style={{ color: 'var(--muted)' }}>
-            Enter a ZK commitment hash to verify credit tier — without knowing their identity.
+          <h1 className="text-2xl font-bold">Verify Attestation</h1>
+          <p className="text-xs" style={{ color: 'var(--muted)' }}>
+            Check a ZK commitment to verify credit tier — without knowing the wallet behind it.
           </p>
         </div>
 
-        <div className="card-glow glow-teal space-y-4">
+        <div className="card space-y-3">
           <div>
-            <label className="text-[10px] uppercase tracking-widest block mb-2" style={{ color: 'var(--muted)' }}>Commitment Hash</label>
+            <label className="text-[9px] uppercase tracking-widest block mb-1.5" style={{ color: 'var(--muted)' }}>Commitment Hash</label>
             <input
-              type="text"
-              value={commitment}
-              onChange={(e) => setCommitment(e.target.value)}
+              type="text" value={commitment} onChange={(e) => setCommitment(e.target.value)}
               placeholder="0x..."
-              className="w-full p-3.5 rounded-2xl text-sm font-mono focus:outline-none transition"
+              className="w-full p-3 rounded-xl text-sm font-mono focus:outline-none transition"
               style={{ background: 'var(--card-hover)', border: '1px solid var(--border)', color: 'var(--foreground)' }}
             />
           </div>
-          <button onClick={handleVerify} disabled={verifying || !commitment} className="btn-primary w-full py-3.5 rounded-2xl">
-            {verifying ? 'Verifying on-chain...' : 'Verify Attestation'}
+          <button onClick={handleVerify} disabled={verifying || !commitment} className="btn w-full py-3 rounded-xl">
+            {verifying ? 'Verifying...' : 'Verify Attestation'}
           </button>
         </div>
 
         {error && (
-          <div className="p-4 rounded-2xl text-sm" style={{ background: 'var(--red-soft, rgba(235,87,87,0.12))', color: 'var(--red)', border: '1px solid rgba(235,87,87,0.2)' }}>
-            {error}
-          </div>
+          <div className="card text-sm" style={{ borderColor: 'rgba(248,113,113,0.2)', color: '#f87171' }}>{error}</div>
         )}
 
         {result && (
-          <div className="space-y-4">
-            <div className="card-glow space-y-4">
+          <div className="space-y-3">
+            <div className="card space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--muted)' }}>Credit Tier</span>
-                <span className="text-lg font-bold px-3 py-1 rounded-full" style={{ color: TIER_COLORS[result.tier], background: TIER_BGS[result.tier] }}>
+                <span className="text-[9px] uppercase tracking-widest" style={{ color: 'var(--muted)' }}>Credit Tier</span>
+                <span className="text-sm font-bold px-2.5 py-1 rounded-md" style={{ color: TIER_COLORS[result.tier], background: TIER_BGS[result.tier] }}>
                   {TIER_NAMES[result.tier]}
                 </span>
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 rounded-xl" style={{ background: 'var(--card-hover)' }}>
-                  <div className="text-[10px] uppercase" style={{ color: 'var(--muted-dim)' }}>Max Loan</div>
-                  <div className="text-xl font-bold mt-1">${result.maxLoanUSD.toLocaleString()}</div>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="p-2.5 rounded-lg" style={{ background: 'var(--card-hover)' }}>
+                  <div className="text-[9px] uppercase" style={{ color: 'var(--muted-dim)' }}>Max Loan</div>
+                  <div className="text-lg font-bold">${result.maxLoanUSD.toLocaleString()}</div>
                 </div>
-                <div className="p-3 rounded-xl" style={{ background: 'var(--card-hover)' }}>
-                  <div className="text-[10px] uppercase" style={{ color: 'var(--muted-dim)' }}>APR</div>
-                  <div className="text-xl font-bold mt-1">{(result.suggestedAPR / 100).toFixed(1)}%</div>
+                <div className="p-2.5 rounded-lg" style={{ background: 'var(--card-hover)' }}>
+                  <div className="text-[9px] uppercase" style={{ color: 'var(--muted-dim)' }}>APR</div>
+                  <div className="text-lg font-bold">{(result.suggestedAPR / 100).toFixed(1)}%</div>
                 </div>
               </div>
-              <div>
-                <div className="text-[10px] uppercase" style={{ color: 'var(--muted-dim)' }}>Scored At</div>
-                <div className="text-sm mt-1">{new Date(result.timestamp * 1000).toLocaleString()}</div>
+              <div className="text-[10px]" style={{ color: 'var(--muted)' }}>
+                Scored {new Date(result.timestamp * 1000).toLocaleString()}
               </div>
             </div>
 
             {eligible !== null && (
-              <div className="p-4 rounded-2xl flex items-center gap-2" style={{
-                background: eligible ? 'rgba(39,174,96,0.12)' : 'rgba(235,87,87,0.12)',
-                border: `1px solid ${eligible ? 'rgba(39,174,96,0.2)' : 'rgba(235,87,87,0.2)'}`
+              <div className="card flex items-center gap-2" style={{
+                borderColor: eligible ? 'rgba(52,211,153,0.2)' : 'rgba(248,113,113,0.15)'
               }}>
-                <span className="text-lg">{eligible ? '✓' : '✗'}</span>
-                <span className="font-medium text-sm" style={{ color: eligible ? '#27ae60' : '#eb5757' }}>
-                  {eligible ? 'Eligible for PayFi flows (tier >= Fair)' : 'Not eligible — tier too low'}
+                <span style={{ color: eligible ? '#34d399' : '#f87171' }}>{eligible ? '\u2713' : '\u2717'}</span>
+                <span className="text-xs" style={{ color: eligible ? '#34d399' : '#f87171' }}>
+                  {eligible ? 'Eligible for PayFi flows' : 'Not eligible — tier too low'}
                 </span>
               </div>
             )}
-
-            <div className="p-3 rounded-2xl text-xs" style={{ background: 'rgba(0,194,168,0.06)', border: '1px solid rgba(0,194,168,0.15)', color: 'var(--teal)' }}>
-              Verified on HashKey Chain. Wallet identity hidden by zero-knowledge commitment.
-            </div>
           </div>
         )}
       </main>
+
+      <footer className="relative z-10 px-5 py-3 mt-12" style={{ borderTop: '1px solid var(--border)' }}>
+        <div className="max-w-5xl mx-auto flex items-center justify-between text-[10px]" style={{ color: 'var(--muted-dim)' }}>
+          <span>ZK-PayID</span>
+          <div className="flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#9F6FFD' }} />
+            <span>HashKey Chain ZKID Track</span>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
