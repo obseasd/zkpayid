@@ -11,11 +11,14 @@
   "dependencies": {
     "@zk-kit/groth16": "^0.5.0",
     "circomlibjs": "^0.1.7",
+    "framer-motion": "^12.38.0",
     "next": "16.2.3",
     "qrcode.react": "^4.2.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "snarkjs": "^0.7.6"
+    "snarkjs": "^0.7.6",
+    "three": "^0.183.2",
+    "vanta": "^0.5.24"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ethers": "^4.0.7",
@@ -25,6 +28,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.183.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.3",
     "ethers": "^6.16.0",

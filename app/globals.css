@@ -1,16 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0c0c10;
-  --foreground: #f0f0f5;
-  --card: #16161c;
-  --card-hover: #1e1e26;
-  --border: #26262e;
-  --border-light: #36363e;
+  --bg: #020617;
+  --bg-alt: #0F172A;
+  --foreground: #F8FAFC;
+  --card: rgba(15, 23, 42, 0.7);
+  --card-hover: rgba(30, 41, 59, 0.5);
+  --border: rgba(255,255,255,0.08);
+  --border-light: rgba(255,255,255,0.15);
   --hsk: #9F6FFD;
   --hsk-hover: #b08aff;
   --hsk-soft: rgba(159, 111, 253, 0.12);
-  --hsk-glow: rgba(159, 111, 253, 0.06);
+  --hsk-glow: rgba(159, 111, 253, 0.15);
   --teal: #00d4aa;
   --teal-soft: rgba(0, 212, 170, 0.10);
   --green: #34d399;
@@ -20,13 +21,12 @@
   --amber: #fbbf24;
   --amber-soft: rgba(251, 191, 36, 0.10);
   --blue: #60a5fa;
-  --blue-soft: rgba(96, 165, 250, 0.10);
-  --muted: #8b8b9a;
-  --muted-dim: #55555e;
+  --muted: rgba(255,255,255,0.50);
+  --muted-dim: rgba(255,255,255,0.25);
 }
 
 @theme inline {
-  --color-background: var(--background);
+  --color-background: var(--bg);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-hover: var(--card-hover);
@@ -43,36 +43,88 @@
 * { box-sizing: border-box; }
 
 body {
-  background: var(--background);
+  background: linear-gradient(165deg, #020617 0%, #0F172A 35%, #1E293B 70%, #0F172A 100%);
   color: var(--foreground);
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
 }
 
-.card {
+.glass {
   background: var(--card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 1rem;
+}
+
+.glass:hover {
+  border-color: var(--border-light);
 }
 
 .btn {
   background: var(--hsk);
   color: white;
   border: none;
-  border-radius: 12px;
-  padding: 10px 20px;
+  border-radius: 9999px;
+  padding: 12px 28px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.btn:hover {
+  background: var(--hsk-hover);
+  box-shadow: 0 0 30px var(--hsk-glow);
+  transform: scale(1.03);
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.btn-outline {
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  padding: 12px 28px;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  transition: background 0.15s, opacity 0.15s;
+  transition: all 0.2s;
+  backdrop-filter: blur(12px);
 }
-.btn:hover { background: var(--hsk-hover); }
-.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-outline:hover {
+  border-color: rgba(159,111,253,0.4);
+  background: rgba(255,255,255,0.03);
+}
 
+/* 3D text shadow like Trust */
+.hero-text {
+  filter: drop-shadow(2px 2px 0px #3f3f46) drop-shadow(3px 3px 0px #27272a) drop-shadow(4px 4px 0px #18181b) drop-shadow(5px 5px 0px #09090b);
+  text-shadow: 8px 8px 15px rgba(0,0,0,0.8);
+}
+
+/* Score animation */
 @keyframes scoreReveal {
-  from { stroke-dasharray: 0 327; }
+  from { stroke-dasharray: 0 264; }
 }
 
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up { animation: fadeUp 0.6s ease-out forwards; }
+.fade-up-1 { animation-delay: 0.1s; opacity: 0; }
+.fade-up-2 { animation-delay: 0.25s; opacity: 0; }
+.fade-up-3 { animation-delay: 0.4s; opacity: 0; }
+.fade-up-4 { animation-delay: 0.55s; opacity: 0; }
+
+/* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--muted-dim); border-radius: 2px; }
+::-webkit-scrollbar-track { background: #050914; }
+::-webkit-scrollbar-thumb { background: var(--hsk); border-radius: 2px; }
+
+/* Selection */
+::selection { background: var(--hsk-glow); }
