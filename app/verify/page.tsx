@@ -32,7 +32,7 @@ export default function VerifyPage() {
 
       <nav className="relative z-10 flex items-center justify-between px-5 py-3 max-w-5xl mx-auto">
         <a href="/" className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-md flex items-center justify-center text-[11px] font-bold text-white" style={{ background: '#9F6FFD' }}>ZK</div>
+          <img src="/logo.png" alt="ZK-PayID" className="w-7 h-7 rounded-md" />
           <span className="font-semibold text-sm">ZK-PayID</span>
         </a>
         <div className="flex items-center gap-4 text-xs">

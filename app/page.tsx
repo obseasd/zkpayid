@@ -80,7 +80,7 @@ export default function Home() {
       {/* Nav — glassmorphism */}
       <nav className="relative z-20 flex items-center justify-between px-6 py-3 max-w-6xl mx-auto">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white" style={{ background: 'linear-gradient(135deg, #9F6FFD, #7C4FE0)' }}>ZK</div>
+          <img src="/logo.png" alt="ZK-PayID" className="w-8 h-8 rounded-lg" />
           <span className="font-bold text-base tracking-tight">ZK-PayID</span>
         </div>
         <div className="flex items-center gap-5 text-sm">
