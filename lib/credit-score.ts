@@ -57,7 +57,7 @@ export async function computeCreditScore(address: string): Promise<CreditResult>
     { name: 'Balance Stability', score: stabilityScore, max: 20, detail: balanceEth > 1 ? 'Stable' : 'Low stability', weight: 1 },
   ]
 
-  const totalScore = dimensions.reduce((sum, d) => sum + d.score, 0)
+  const totalScore = Math.round(dimensions.reduce((sum, d) => sum + d.score, 0) * 100) / 100
 
   const tier = TIERS.slice().reverse().find(t => totalScore >= t.min) || TIERS[0]
   const tierIndex = TIERS.indexOf(tier)
@@ -85,7 +85,7 @@ export function generateCommitment(address: string, score: number, nonce: string
   return ethers.keccak256(
     ethers.AbiCoder.defaultAbiCoder().encode(
       ['address', 'uint256', 'bytes32'],
-      [address, score, ethers.keccak256(ethers.toUtf8Bytes(nonce))]
+      [address, Math.floor(score), ethers.keccak256(ethers.toUtf8Bytes(nonce))]
     )
   )
 }
