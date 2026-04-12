@@ -1,0 +1,36 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_20-fd6cae47b29417e82af271dd11aca847b04535d7",
+  "solcVersion": "0.8.20",
+  "solcLongVersion": "0.8.20+commit.a1b79de6",
+  "compilerType": "solc",
+  "userSourceNameMap": {
+    "contracts/ZKCreditScore.sol": "project/contracts/ZKCreditScore.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "shanghai",
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/ZKCreditScore.sol": {
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.20;\n\n/// @title ZKCreditScore — Privacy-preserving on-chain credit scoring for HashKey Chain\n/// @notice Users prove creditworthiness via ZK proofs without revealing wallet identity or balances\n/// @dev Uses Groth16 proofs verified on-chain. Score tiers unlock PayFi flows (lending, payments)\n\ncontract ZKCreditScore {\n    // --- Types ---\n    struct CreditAttestation {\n        bytes32 commitment;     // Poseidon hash of (address, score, nonce)\n        uint8 tier;             // 0=poor, 1=fair, 2=good, 3=excellent\n        uint256 maxLoanUSD;     // Max loan amount in USD (6 decimals)\n        uint256 suggestedAPR;   // Suggested APR in basis points (e.g., 350 = 3.5%)\n        uint256 timestamp;\n        bool valid;\n    }\n\n    // --- State ---\n    mapping(bytes32 => CreditAttestation) public attestations;\n    mapping(address => bytes32[]) public userAttestations;\n    address public verifier;    // Groth16 verifier contract\n    address public owner;\n    uint256 public totalScored;\n\n    // --- Events ---\n    event CreditScored(bytes32 indexed commitment, uint8 tier, uint256 maxLoanUSD, uint256 timestamp);\n    event AttestationRevoked(bytes32 indexed commitment);\n    event VerifierUpdated(address indexed newVerifier);\n\n    // --- Errors ---\n    error InvalidProof();\n    error AttestationNotFound();\n    error OnlyOwner();\n    error AlreadyExists();\n\n    constructor(address _verifier) {\n        owner = msg.sender;\n        verifier = _verifier;\n    }\n\n    modifier onlyOwner() {\n        if (msg.sender != owner) revert OnlyOwner();\n        _;\n    }\n\n    /// @notice Submit a ZK credit score attestation\n    /// @param commitment Poseidon(address, score, nonce) — hides identity\n    /// @param tier Credit tier (0-3)\n    /// @param maxLoanUSD Maximum loan in USD (6 decimals)\n    /// @param suggestedAPR APR in basis points\n    /// @param proof Groth16 proof bytes (placeholder for now)\n    function submitScore(\n        bytes32 commitment,\n        uint8 tier,\n        uint256 maxLoanUSD,\n        uint256 suggestedAPR,\n        bytes calldata proof\n    ) external {\n        if (attestations[commitment].valid) revert AlreadyExists();\n\n        // In production: verify Groth16 proof on-chain\n        // IVerifier(verifier).verify(proof, [commitment, tier, maxLoanUSD])\n        // For hackathon: accept if proof length > 0\n        if (proof.length == 0) revert InvalidProof();\n\n        attestations[commitment] = CreditAttestation({\n            commitment: commitment,\n            tier: tier,\n            maxLoanUSD: maxLoanUSD,\n            suggestedAPR: suggestedAPR,\n            timestamp: block.timestamp,\n            valid: true\n        });\n\n        userAttestations[msg.sender].push(commitment);\n        totalScored++;\n\n        emit CreditScored(commitment, tier, maxLoanUSD, block.timestamp);\n    }\n\n    /// @notice Verify a credit attestation exists and is valid\n    /// @param commitment The commitment to check\n    /// @return tier Credit tier\n    /// @return maxLoanUSD Maximum loan\n    /// @return suggestedAPR Suggested APR\n    /// @return timestamp When scored\n    function verify(bytes32 commitment) external view returns (\n        uint8 tier, uint256 maxLoanUSD, uint256 suggestedAPR, uint256 timestamp\n    ) {\n        CreditAttestation memory a = attestations[commitment];\n        if (!a.valid) revert AttestationNotFound();\n        return (a.tier, a.maxLoanUSD, a.suggestedAPR, a.timestamp);\n    }\n\n    /// @notice Check if a commitment meets minimum tier for a PayFi flow\n    /// @param commitment The commitment\n    /// @param minTier Minimum required tier (0-3)\n    /// @return eligible Whether the commitment meets the requirement\n    function isEligible(bytes32 commitment, uint8 minTier) external view returns (bool eligible) {\n        CreditAttestation memory a = attestations[commitment];\n        return a.valid && a.tier >= minTier;\n    }\n\n    /// @notice Revoke an attestation\n    function revoke(bytes32 commitment) external {\n        CreditAttestation storage a = attestations[commitment];\n        if (!a.valid) revert AttestationNotFound();\n        a.valid = false;\n        emit AttestationRevoked(commitment);\n    }\n\n    /// @notice Update the verifier contract\n    function setVerifier(address _verifier) external onlyOwner {\n        verifier = _verifier;\n        emit VerifierUpdated(_verifier);\n    }\n\n    /// @notice Get all attestations for a user\n    function getUserAttestations(address user) external view returns (bytes32[] memory) {\n        return userAttestations[user];\n    }\n}\n"
+      }
+    }
+  }
+}
