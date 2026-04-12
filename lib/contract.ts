@@ -36,20 +36,29 @@ export async function submitAttestation(
   suggestedAPR: number
 ): Promise<string> {
   const contract = await getWriteContract()
-  if (!contract) throw new Error('Contract not available — deploy first or connect wallet')
+  if (!contract) throw new Error('Contract not available. Make sure you are on HashKey Chain Testnet (Chain ID 133) and the contract is deployed.')
 
   // Placeholder proof (in production: Groth16 proof bytes)
   const proof = ethers.toUtf8Bytes('zk-proof-placeholder')
 
-  const tx = await contract.submitScore(
-    commitment,
-    tier,
-    ethers.parseUnits(maxLoanUSD.toString(), 6),
-    suggestedAPR,
-    proof
-  )
-  const receipt = await tx.wait()
-  return receipt.hash
+  try {
+    const tx = await contract.submitScore(
+      commitment,
+      tier,
+      BigInt(Math.round(maxLoanUSD * 1e6)),
+      suggestedAPR,
+      proof
+    )
+    const receipt = await tx.wait()
+    return receipt.hash
+  } catch (err: unknown) {
+    const error = err as { reason?: string; code?: string; message?: string }
+    if (error.code === 'ACTION_REJECTED') throw new Error('Transaction rejected by user')
+    if (error.reason) throw new Error(error.reason)
+    if (error.message?.includes('AlreadyExists')) throw new Error('This attestation already exists on-chain')
+    if (error.message?.includes('insufficient funds')) throw new Error('Insufficient HSK for gas. Get testnet tokens from hashkeychain.net/faucet')
+    throw new Error(error.message || 'Transaction failed')
+  }
 }
 
 export async function verifyAttestation(commitment: string): Promise<{

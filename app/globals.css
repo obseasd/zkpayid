@@ -42,8 +42,8 @@
 
 * { box-sizing: border-box; }
 
-body {
-  background: linear-gradient(165deg, #020617 0%, #0F172A 35%, #1E293B 70%, #0F172A 100%);
+html, body {
+  background: #0a0f1e;
   color: var(--foreground);
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;

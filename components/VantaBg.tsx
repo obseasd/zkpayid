@@ -39,5 +39,5 @@ export default function VantaBg() {
     return () => { if (effect.current) effect.current.destroy() }
   }, [])
 
-  return <div ref={ref} className="fixed inset-0 z-0" />
+  return <div ref={ref} className="fixed inset-0 z-0" style={{ background: 'linear-gradient(165deg, #020617 0%, #0F172A 35%, #1E293B 70%, #0F172A 100%)' }} />
 }
