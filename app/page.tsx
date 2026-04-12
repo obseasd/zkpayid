@@ -237,7 +237,7 @@ export default function Home() {
         )}
       </main>
 
-      <footer className="relative z-10 px-5 py-3" style={{ borderTop: '1px solid var(--border)' }}>
+      <footer className="fixed bottom-0 left-0 right-0 z-10 px-5 py-3" style={{ borderTop: '1px solid var(--border)', background: '#0c0c10' }}>
         <div className="max-w-5xl mx-auto flex items-center justify-between text-[10px]" style={{ color: 'var(--muted-dim)' }}>
           <span>ZK-PayID</span>
           <div className="flex items-center gap-1">
