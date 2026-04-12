@@ -23,6 +23,11 @@ export default function Home() {
   const [submitted, setSubmitted] = useState(false)
 
   const handleConnect = useCallback(async () => {
+    if (typeof window === 'undefined') return
+    if (!window.ethereum) {
+      alert('Please install MetaMask to connect your wallet')
+      return
+    }
     setConnecting(true)
     try {
       const { address: addr, chainId: cid } = await connectWallet()
@@ -30,7 +35,9 @@ export default function Home() {
       setChainId(cid)
       const bal = await getBalance(addr)
       setBalance(bal)
-    } catch (err) { console.error(err) }
+    } catch (err) {
+      console.error('Connect error:', err)
+    }
     setConnecting(false)
   }, [])
 
