@@ -41,3 +41,8 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+circuits/*.ptau
+circuits/*.zkey
+circuits/*.r1cs
+circuits/*.sym
+circom.exe

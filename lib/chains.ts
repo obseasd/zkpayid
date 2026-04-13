@@ -8,6 +8,7 @@ export interface ChainConfig {
   contracts: {
     zkCreditScore?: string
     zkGatedPool?: string
+    groth16Verifier?: string
   }
 }
 
@@ -21,6 +22,7 @@ export const HASHKEY_TESTNET: ChainConfig = {
   contracts: {
     zkCreditScore: '0x1d03f395bCC1E5bd0e516bE2C1Aa28950910DDC5',
     zkGatedPool: '0x3338d2791e1cab22835a3975b1401C0f16C2AcCa',
+    groth16Verifier: '0x217dC1a541e72B2dcE8EF921885123DD5F6AbA5D',
   },
 }
 
