@@ -108,10 +108,10 @@ export default function Home() {
 
       {/* Nav */}
       <nav className="relative z-20 flex items-center justify-between px-6 py-3 max-w-6xl mx-auto">
-        <div className="flex items-center gap-2.5">
+        <a href="/" className="flex items-center gap-2.5 hover:opacity-80 transition">
           <img src="/logo.png" alt="ZK-PayID" className="w-8 h-8 rounded-lg" />
           <span className="font-bold text-base tracking-tight">ZK-PayID</span>
-        </div>
+        </a>
         <div className="flex items-center gap-5 text-sm">
           <a href="/" className="font-medium" style={{ color: '#9F6FFD' }}>Score</a>
           <a href="/verify" className="transition hover:text-white" style={{ color: 'var(--muted)' }}>Verify</a>

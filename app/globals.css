@@ -43,7 +43,7 @@
 * { box-sizing: border-box; }
 
 html, body {
-  background: #0a0f1e;
+  background: #080b16;
   color: var(--foreground);
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
