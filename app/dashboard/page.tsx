@@ -15,13 +15,13 @@ const MOCK_ATTESTATIONS = [
   { commitment: '0x1111222233334444555566667777888899990000', tier: 'Good', timestamp: Date.now() - 43200000 },
 ]
 
-const TIER_COLORS: Record<string, string> = { Excellent: '#34d399', Good: '#60a5fa', Fair: '#fbbf24', Poor: '#f87171' }
+const TIER_COLORS: Record<string, string> = { Excellent: '#9F6FFD', Good: '#1a9a5c', Fair: '#6b7280', Poor: '#b91c1c' }
 
 const CHAINS_DATA = [
-  { name: 'Ethereum', logo: '/chains/ethereum.png', weight: 3.0, color: '#627eea', desc: 'Mainnet history (highest signal)' },
-  { name: 'Base', logo: '/chains/base.png', weight: 1.5, color: '#0052ff', desc: 'L2 activity on Coinbase chain' },
-  { name: 'Arbitrum', logo: '/chains/arbitrum.png', weight: 1.5, color: '#28a0f0', desc: 'L2 rollup transactions' },
-  { name: 'Polygon', logo: '/chains/polygon.png', weight: 1.0, color: '#8247e5', desc: 'PoS chain engagement' },
+  { name: 'Ethereum', logo: '/chains/ethereum.png', weight: 3.0, color: '#ffffff', desc: 'Mainnet history (highest signal)' },
+  { name: 'Base', logo: '/chains/base.png', weight: 1.5, color: '#7cb3f4', desc: 'L2 activity on Coinbase chain' },
+  { name: 'Arbitrum', logo: '/chains/arbitrum.png', weight: 1.5, color: '#5cc4f0', desc: 'L2 rollup transactions' },
+  { name: 'Polygon', logo: '/chains/polygon.png', weight: 1.0, color: '#a370f7', desc: 'PoS chain engagement' },
   { name: 'HashKey', logo: '/chains/hashkey.png', weight: 1.0, color: '#9F6FFD', desc: 'Target chain (attestation)' },
 ]
 
@@ -30,10 +30,10 @@ export default function DashboardPage() {
   useEffect(() => { getTotalScored().then(setTotalScored).catch(() => {}) }, [])
 
   const tierData = [
-    { tier: 'Excellent', pct: 12, color: '#34d399', bg: '#0d2d22' },
-    { tier: 'Good', pct: 35, color: '#60a5fa', bg: '#0d1f3a' },
-    { tier: 'Fair', pct: 28, color: '#fbbf24', bg: '#2d2410' },
-    { tier: 'Poor', pct: 25, color: '#f87171', bg: '#2d1515' },
+    { tier: 'Excellent', pct: 12, color: '#9F6FFD', bg: '#1a1230' },
+    { tier: 'Good', pct: 35, color: '#1a9a5c', bg: '#0d1f16' },
+    { tier: 'Fair', pct: 28, color: '#6b7280', bg: '#1a1a1e' },
+    { tier: 'Poor', pct: 25, color: '#b91c1c', bg: '#1f0d0d' },
   ]
 
   return (
@@ -62,9 +62,9 @@ export default function DashboardPage() {
         <div className="grid grid-cols-4 gap-3 mb-5">
           {[
             { v: totalScored, l: 'Attestations', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', color: '#9F6FFD' },
-            { v: 5, l: 'Chains', icon: 'M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1', color: '#60a5fa' },
-            { v: 3, l: 'Contracts', icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4', color: '#34d399' },
-            { v: 286, l: 'Constraints', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', color: '#fbbf24' },
+            { v: 5, l: 'Chains', icon: 'M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1', color: '#9F6FFD' },
+            { v: 3, l: 'Contracts', icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4', color: '#9F6FFD' },
+            { v: 286, l: 'Constraints', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', color: '#9F6FFD' },
           ].map(({ v, l, icon, color }) => (
             <div key={l} className="glass p-4 rounded-2xl">
               <div className="flex items-center gap-2 mb-2">
@@ -182,13 +182,13 @@ export default function DashboardPage() {
           <div className="text-[9px] uppercase tracking-widest font-bold mb-3" style={{ color: 'var(--muted)' }}>Deployed Contracts</div>
           <div className="grid grid-cols-3 gap-2">
             {[
-              { name: 'ZKCreditScore', addr: ACTIVE_CHAIN.contracts.zkCreditScore || '', desc: 'Attestation Registry', color: '#9F6FFD' },
-              { name: 'ZKGatedPool', addr: ACTIVE_CHAIN.contracts.zkGatedPool || '', desc: 'Credit-Gated Pool', color: '#34d399' },
-              { name: 'Groth16Verifier', addr: ACTIVE_CHAIN.contracts.groth16Verifier || '', desc: 'ZK Proof Verifier', color: '#fbbf24' },
-            ].map(({ name, addr, desc, color }) => (
+              { name: 'ZKCreditScore', addr: ACTIVE_CHAIN.contracts.zkCreditScore || '', desc: 'Attestation Registry' },
+              { name: 'ZKGatedPool', addr: ACTIVE_CHAIN.contracts.zkGatedPool || '', desc: 'Credit-Gated Pool' },
+              { name: 'Groth16Verifier', addr: ACTIVE_CHAIN.contracts.groth16Verifier || '', desc: 'ZK Proof Verifier' },
+            ].map(({ name, addr, desc }) => (
               <a key={name} href={`${ACTIVE_CHAIN.explorer}/address/${addr}`} target="_blank" rel="noopener noreferrer"
                 className="p-3 rounded-xl transition hover:bg-white/[0.03] group" style={{ background: 'rgba(0,0,0,0.15)', border: '1px solid var(--border)' }}>
-                <div className="text-xs font-bold mb-0.5 group-hover:underline" style={{ color }}>{name}</div>
+                <div className="text-xs font-bold mb-0.5 group-hover:underline text-white">{name}</div>
                 <div className="text-[8px] mb-1.5" style={{ color: 'var(--muted-dim)' }}>{desc}</div>
                 <div className="font-mono text-[8px]" style={{ color: 'var(--muted)' }}>{addr.slice(0, 8)}...{addr.slice(-6)}</div>
               </a>

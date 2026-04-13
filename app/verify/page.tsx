@@ -7,8 +7,8 @@ import { verifyAttestation, checkEligibility } from '@/lib/contract'
 const VantaBg = dynamic(() => import('@/components/VantaBg'), { ssr: false })
 
 const TIER_NAMES = ['Poor', 'Fair', 'Good', 'Excellent']
-const TIER_COLORS = ['#f87171', '#fbbf24', '#60a5fa', '#34d399']
-const TIER_BGS = ['rgba(248,113,113,0.12)', 'rgba(251,191,36,0.12)', 'rgba(96,165,250,0.12)', 'rgba(52,211,153,0.12)']
+const TIER_COLORS = ['#b91c1c', '#6b7280', '#1a9a5c', '#9F6FFD']
+const TIER_BGS = ['rgba(185,28,28,0.12)', 'rgba(107,114,128,0.12)', 'rgba(26,154,92,0.12)', 'rgba(159,111,253,0.12)']
 
 export default function VerifyPage() {
   const [commitment, setCommitment] = useState('')

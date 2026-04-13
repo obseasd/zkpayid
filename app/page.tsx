@@ -11,10 +11,10 @@ import { ACTIVE_CHAIN } from '@/lib/chains'
 const VantaBg = dynamic(() => import('@/components/VantaBg'), { ssr: false })
 
 const TIERS: Record<string, { color: string; bg: string; ring: string }> = {
-  excellent: { color: '#34d399', bg: 'rgba(52,211,153,0.12)', ring: 'rgba(52,211,153,0.25)' },
-  good: { color: '#60a5fa', bg: 'rgba(96,165,250,0.12)', ring: 'rgba(96,165,250,0.25)' },
-  fair: { color: '#fbbf24', bg: 'rgba(251,191,36,0.12)', ring: 'rgba(251,191,36,0.25)' },
-  poor: { color: '#f87171', bg: 'rgba(248,113,113,0.12)', ring: 'rgba(248,113,113,0.25)' },
+  excellent: { color: '#9F6FFD', bg: 'rgba(159,111,253,0.12)', ring: 'rgba(159,111,253,0.25)' },
+  good: { color: '#1a9a5c', bg: 'rgba(26,154,92,0.12)', ring: 'rgba(26,154,92,0.25)' },
+  fair: { color: '#6b7280', bg: 'rgba(107,114,128,0.12)', ring: 'rgba(107,114,128,0.25)' },
+  poor: { color: '#b91c1c', bg: 'rgba(185,28,28,0.12)', ring: 'rgba(185,28,28,0.25)' },
 }
 
 export default function Home() {
@@ -119,7 +119,7 @@ export default function Home() {
           {address ? (
             <div className="glass flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(2,6,23,0.8)' }}>
               {!onChain && <button onClick={handleSwitch} disabled={switching} className="text-[10px] px-2.5 py-0.5 rounded-full font-semibold transition hover:opacity-80" style={{ background: 'rgba(251,191,36,0.15)', color: '#fbbf24' }}>{switching ? '...' : 'Switch'}</button>}
-              {onChain && <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#34d399' }} />}
+              {onChain && <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#1a9a5c' }} />}
               <span className="text-xs font-mono" style={{ color: 'var(--muted)' }}>{short}</span>
             </div>
           ) : (
@@ -254,7 +254,7 @@ export default function Home() {
                       <span style={{ color: 'var(--muted-dim)' }}>&middot; 286 constraints &middot; Poseidon &middot; bn128</span>
                     </div>
                     {provingStep && !provingZK && provingStep.includes('failed') && (
-                      <div className="text-[10px] mb-2 p-2 rounded-lg" style={{ background: 'rgba(248,113,113,0.1)', color: '#f87171' }}>{provingStep}</div>
+                      <div className="text-[10px] mb-2 p-2 rounded-lg" style={{ background: 'rgba(248,113,113,0.1)', color: '#b91c1c' }}>{provingStep}</div>
                     )}
                     <button onClick={handleGenerateProof} disabled={provingZK} className="btn w-full py-3 rounded-xl text-xs">
                       {provingZK ? (
@@ -267,11 +267,11 @@ export default function Home() {
                   </div>
                 ) : (
                   /* ZK PROOF RESULT — visual proof details */
-                  <div className="glass p-4 rounded-2xl" style={{ borderColor: 'rgba(52,211,153,0.3)', boxShadow: '0 0 20px rgba(52,211,153,0.08)' }}>
+                  <div className="glass p-4 rounded-2xl" style={{ borderColor: 'rgba(26,154,92,0.3)', boxShadow: '0 0 20px rgba(26,154,92,0.08)' }}>
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
-                        <span className="text-[8px] uppercase tracking-widest font-bold" style={{ color: '#34d399' }}>ZK Proof Verified</span>
-                        <span className="text-[7px] px-1.5 py-0.5 rounded-full font-bold" style={{ background: 'rgba(52,211,153,0.12)', color: '#34d399' }}>Groth16</span>
+                        <span className="text-[8px] uppercase tracking-widest font-bold" style={{ color: '#1a9a5c' }}>ZK Proof Verified</span>
+                        <span className="text-[7px] px-1.5 py-0.5 rounded-full font-bold" style={{ background: 'rgba(26,154,92,0.12)', color: '#1a9a5c' }}>Groth16</span>
                       </div>
                       <span className="text-[9px] font-mono" style={{ color: 'var(--muted)' }}>{zkProof.proofTime}ms</span>
                     </div>
@@ -292,15 +292,15 @@ export default function Home() {
 
                     <div className="grid grid-cols-3 gap-2 mb-3">
                       <div className="p-2 rounded-lg text-center" style={{ background: 'rgba(0,0,0,0.2)' }}>
-                        <div className="text-sm font-bold" style={{ color: '#34d399' }}>286</div>
+                        <div className="text-sm font-bold" style={{ color: '#1a9a5c' }}>286</div>
                         <div className="text-[7px] uppercase" style={{ color: 'var(--muted-dim)' }}>Constraints</div>
                       </div>
                       <div className="p-2 rounded-lg text-center" style={{ background: 'rgba(0,0,0,0.2)' }}>
-                        <div className="text-sm font-bold" style={{ color: '#34d399' }}>{zkProof.valid ? 'Valid' : 'Invalid'}</div>
+                        <div className="text-sm font-bold" style={{ color: '#1a9a5c' }}>{zkProof.valid ? 'Valid' : 'Invalid'}</div>
                         <div className="text-[7px] uppercase" style={{ color: 'var(--muted-dim)' }}>Status</div>
                       </div>
                       <div className="p-2 rounded-lg text-center" style={{ background: 'rgba(0,0,0,0.2)' }}>
-                        <div className="text-sm font-bold" style={{ color: '#34d399' }}>Local</div>
+                        <div className="text-sm font-bold" style={{ color: '#1a9a5c' }}>Local</div>
                         <div className="text-[7px] uppercase" style={{ color: 'var(--muted-dim)' }}>Computed</div>
                       </div>
                     </div>
@@ -313,7 +313,7 @@ export default function Home() {
 
                     {/* Submit on-chain */}
                     {submitTx ? (
-                      <a href={`${ACTIVE_CHAIN.explorer}/tx/${submitTx}`} target="_blank" rel="noopener noreferrer" className="block w-full py-2.5 rounded-xl text-center text-[10px] font-bold transition hover:opacity-80 uppercase tracking-wide" style={{ background: 'rgba(52,211,153,0.12)', color: '#34d399' }}>
+                      <a href={`${ACTIVE_CHAIN.explorer}/tx/${submitTx}`} target="_blank" rel="noopener noreferrer" className="block w-full py-2.5 rounded-xl text-center text-[10px] font-bold transition hover:opacity-80 uppercase tracking-wide" style={{ background: 'rgba(26,154,92,0.12)', color: '#1a9a5c' }}>
                         View on HashKey Explorer
                       </a>
                     ) : (
@@ -321,19 +321,19 @@ export default function Home() {
                         <button onClick={handleSubmit} disabled={submitting} className="btn w-full py-3 rounded-xl text-xs">
                           {submitting ? (<span className="flex items-center justify-center gap-2"><span className="inline-block w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />Submitting to HashKey Chain...</span>) : 'Submit ZK Attestation On-Chain'}
                         </button>
-                        {submitError && <div className="text-[9px] mt-1.5 text-center" style={{ color: '#f87171' }}>{submitError}</div>}
+                        {submitError && <div className="text-[9px] mt-1.5 text-center" style={{ color: '#b91c1c' }}>{submitError}</div>}
                       </>
                     )}
                   </div>
                 )}
 
                 {/* Pool */}
-                <div className="glass p-3 rounded-2xl flex items-center justify-between" style={{ borderColor: result.tierIndex >= 2 ? 'rgba(52,211,153,0.15)' : 'var(--border)' }}>
+                <div className="glass p-3 rounded-2xl flex items-center justify-between" style={{ borderColor: result.tierIndex >= 2 ? 'rgba(26,154,92,0.15)' : 'var(--border)' }}>
                   <div>
                     <div className="text-[8px] uppercase tracking-widest font-bold" style={{ color: 'var(--muted)' }}>ZK-Gated Pool</div>
-                    <div className="text-[11px] font-semibold mt-0.5" style={{ color: result.tierIndex >= 2 ? '#34d399' : 'var(--muted)' }}>{result.tierIndex >= 2 ? 'Eligible — deposit HSK to earn yield' : 'Locked — requires GOOD tier or above'}</div>
+                    <div className="text-[11px] font-semibold mt-0.5" style={{ color: result.tierIndex >= 2 ? '#1a9a5c' : 'var(--muted)' }}>{result.tierIndex >= 2 ? 'Eligible — deposit HSK to earn yield' : 'Locked — requires GOOD tier or above'}</div>
                   </div>
-                  <button disabled={result.tierIndex < 2} className="text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-wide transition hover:opacity-80" style={{ background: result.tierIndex >= 2 ? 'rgba(52,211,153,0.12)' : 'rgba(255,255,255,0.03)', color: result.tierIndex >= 2 ? '#34d399' : 'var(--muted-dim)', cursor: result.tierIndex >= 2 ? 'pointer' : 'not-allowed' }}>{result.tierIndex >= 2 ? 'Deposit' : 'Locked'}</button>
+                  <button disabled={result.tierIndex < 2} className="text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-wide transition hover:opacity-80" style={{ background: result.tierIndex >= 2 ? 'rgba(26,154,92,0.12)' : 'rgba(255,255,255,0.03)', color: result.tierIndex >= 2 ? '#1a9a5c' : 'var(--muted-dim)', cursor: result.tierIndex >= 2 ? 'pointer' : 'not-allowed' }}>{result.tierIndex >= 2 ? 'Deposit' : 'Locked'}</button>
                 </div>
 
                 <button onClick={() => { setResult(null); setCommitment(null); setSubmitTx(null); setSubmitError(null); setZkProof(null); setProvingStep('') }} className="w-full py-2 text-xs font-semibold rounded-xl transition hover:bg-white/5 active:scale-[0.98]" style={{ color: 'var(--muted)' }}>Score another wallet</button>
