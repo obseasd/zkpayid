@@ -42,6 +42,7 @@ export default function VerifyPage() {
         <div className="flex items-center gap-5 text-sm">
           <a href="/" className="transition hover:text-white" style={{ color: 'var(--muted)' }}>Score</a>
           <a href="/verify" className="font-medium" style={{ color: '#9F6FFD' }}>Verify</a>
+          <a href="/dashboard" className="transition hover:text-white" style={{ color: 'var(--muted)' }}>Dashboard</a>
         </div>
       </nav>
 

@@ -29,7 +29,7 @@ export default function Home() {
   const [submitTx, setSubmitTx] = useState<string | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [switching, setSwitching] = useState(false)
-  const [totalScored, setTotalScored] = useState(0)
+  const [totalScored, setTotalScored] = useState(0) // used in dashboard
   // ZK proof state
   const [provingZK, setProvingZK] = useState(false)
   const [zkProof, setZkProof] = useState<ZKProofResult | null>(null)
@@ -115,6 +115,7 @@ export default function Home() {
         <div className="flex items-center gap-5 text-sm">
           <a href="/" className="font-medium" style={{ color: '#9F6FFD' }}>Score</a>
           <a href="/verify" className="transition hover:text-white" style={{ color: 'var(--muted)' }}>Verify</a>
+          <a href="/dashboard" className="transition hover:text-white" style={{ color: 'var(--muted)' }}>Dashboard</a>
           {address ? (
             <div className="glass flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(2,6,23,0.8)' }}>
               {!onChain && <button onClick={handleSwitch} disabled={switching} className="text-[10px] px-2.5 py-0.5 rounded-full font-semibold transition hover:opacity-80" style={{ background: 'rgba(251,191,36,0.15)', color: '#fbbf24' }}>{switching ? '...' : 'Switch'}</button>}
@@ -141,14 +142,14 @@ export default function Home() {
                 <span className="bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(to bottom, #b08aff, #7C4FE0)' }}>Prove It.</span>
               </h1>
               <p className="fade-up fade-up-3 text-lg sm:text-xl max-w-xl mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>
-                ZK credit scoring on HashKey Chain. Your wallet identity stays hidden. Your creditworthiness is verifiable on-chain. DeFi access gated by trust.
+                Multi-chain credit scoring with ZK proofs on HashKey Chain. We analyze your activity across Ethereum, Base, Arbitrum, Polygon and HashKey — then prove your creditworthiness without revealing your identity.
               </p>
               <div className="fade-up fade-up-4 flex items-center justify-center gap-4">
                 <button onClick={handleConnect} disabled={connecting} className="btn text-sm py-3.5 px-10">{connecting ? 'Connecting...' : 'Get Started'}</button>
                 <a href="/verify" className="btn-outline text-sm py-3.5 px-8">Verify Score</a>
               </div>
               <div className="fade-up fade-up-4 flex items-center justify-center gap-8 pt-4">
-                {[{ v: totalScored.toString(), l: 'Scored' }, { v: '3', l: 'Contracts' }, { v: '286', l: 'ZK Constraints' }, { v: 'Groth16', l: 'Proving System' }].map(({ v, l }) => (
+                {[{ v: '5', l: 'Chains Analyzed' }, { v: '3', l: 'Contracts' }, { v: '286', l: 'ZK Constraints' }, { v: 'Groth16', l: 'Proving System' }].map(({ v, l }) => (
                   <div key={l} className="text-center"><div className="text-2xl font-bold" style={{ color: '#9F6FFD' }}>{v}</div><div className="text-[10px] uppercase tracking-widest mt-0.5" style={{ color: 'var(--muted-dim)' }}>{l}</div></div>
                 ))}
               </div>
@@ -179,7 +180,7 @@ export default function Home() {
                 </div>
                 {!onChain && <button onClick={handleSwitch} disabled={switching} className="w-full py-3 rounded-xl text-xs font-semibold transition hover:opacity-90" style={{ background: 'rgba(251,191,36,0.1)', color: '#fbbf24', border: '1px solid rgba(251,191,36,0.2)' }}>{switching ? 'Switching...' : 'Switch to HashKey Chain Testnet'}</button>}
                 <button onClick={handleScore} disabled={scoring} className="btn w-full py-4 rounded-2xl text-sm">
-                  {scoring ? (<span className="flex items-center justify-center gap-2"><span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Analyzing on-chain data...</span>) : 'Generate Credit Score'}
+                  {scoring ? (<span className="flex items-center justify-center gap-2"><span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Scanning 5 chains...</span>) : 'Analyze Multi-Chain Credit'}
                 </button>
               </div>
             ) : t && (
@@ -216,6 +217,28 @@ export default function Home() {
                       <span className="text-[9px] w-8 text-right font-mono" style={{ color: 'var(--muted)' }}>{d.score}/{d.max}</span>
                     </div>
                   ))}
+                </div>
+
+                {/* Chain Breakdown */}
+                <div className="glass p-3 rounded-2xl">
+                  <div className="text-[8px] uppercase tracking-widest font-bold mb-2" style={{ color: 'var(--muted)' }}>Chain Analysis ({result.chainScores.filter(c => c.nonce > 0).length}/{result.chainScores.length} active)</div>
+                  <div className="space-y-1">
+                    {result.chainScores.map(c => (
+                      <div key={c.chainId} className="flex items-center gap-2 text-[10px]">
+                        <span className={`w-1.5 h-1.5 rounded-full ${c.nonce > 0 ? 'bg-green-400' : 'bg-zinc-700'}`} />
+                        <span className="w-16 shrink-0 font-medium">{c.chain}</span>
+                        <span className="flex-1 font-mono" style={{ color: c.nonce > 0 ? 'var(--foreground)' : 'var(--muted-dim)' }}>
+                          {c.nonce} tx
+                        </span>
+                        <span className="font-mono" style={{ color: c.balance > 0 ? '#9F6FFD' : 'var(--muted-dim)' }}>
+                          {c.balance > 0 ? c.balance.toFixed(4) : '0'} {c.symbol}
+                        </span>
+                        <span className="text-[8px] px-1 rounded" style={{ background: 'rgba(159,111,253,0.1)', color: '#9F6FFD' }}>
+                          x{c.weight}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {/* ZK PROOF SECTION — the differentiator */}
@@ -326,7 +349,7 @@ export default function Home() {
             <div className="grid grid-cols-5 gap-3">
               {[
                 { n: '01', t: 'Connect', d: 'Link wallet to HashKey Chain' },
-                { n: '02', t: 'Analyze', d: '5-dimension on-chain scoring' },
+                { n: '02', t: 'Analyze', d: '5 chains, 5 dimensions, weighted scoring' },
                 { n: '03', t: 'ZK Prove', d: 'Groth16 proof in browser (286 constraints)' },
                 { n: '04', t: 'Attest', d: 'Submit commitment on-chain' },
                 { n: '05', t: 'Access', d: 'Unlock gated DeFi pools' },
