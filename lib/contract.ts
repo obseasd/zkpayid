@@ -38,12 +38,16 @@ export async function submitAttestation(
   const contract = await getWriteContract()
   if (!contract) throw new Error('Contract not available. Make sure you are on HashKey Chain Testnet (Chain ID 133) and the contract is deployed.')
 
-  // Placeholder proof (in production: Groth16 proof bytes)
-  const proof = ethers.toUtf8Bytes('zk-proof-placeholder')
+  // Convert Poseidon commitment (decimal string) to bytes32
+  const commitmentBN = BigInt(commitment)
+  const commitmentBytes32 = ethers.zeroPadValue(ethers.toBeHex(commitmentBN), 32)
+
+  // Placeholder proof (in production: full Groth16 proof calldata)
+  const proof = ethers.toUtf8Bytes('groth16-proof')
 
   try {
     const tx = await contract.submitScore(
-      commitment,
+      commitmentBytes32,
       tier,
       BigInt(Math.round(maxLoanUSD * 1e6)),
       suggestedAPR,
@@ -71,7 +75,13 @@ export async function verifyAttestation(commitment: string): Promise<{
   if (!contract) return null
 
   try {
-    const [tier, maxLoanUSD, suggestedAPR, timestamp] = await contract.verify(commitment)
+    // Convert decimal commitment to bytes32 if needed
+    let commitmentBytes32 = commitment
+    if (!commitment.startsWith('0x')) {
+      const bn = BigInt(commitment)
+      commitmentBytes32 = ethers.zeroPadValue(ethers.toBeHex(bn), 32)
+    }
+    const [tier, maxLoanUSD, suggestedAPR, timestamp] = await contract.verify(commitmentBytes32)
     return {
       tier: Number(tier),
       maxLoanUSD: Number(ethers.formatUnits(maxLoanUSD, 6)),
@@ -87,7 +97,9 @@ export async function checkEligibility(commitment: string, minTier: number): Pro
   const contract = getReadContract()
   if (!contract) return false
   try {
-    return await contract.isEligible(commitment, minTier)
+    let cb = commitment
+    if (!commitment.startsWith('0x')) { cb = ethers.zeroPadValue(ethers.toBeHex(BigInt(commitment)), 32) }
+    return await contract.isEligible(cb, minTier)
   } catch {
     return false
   }
